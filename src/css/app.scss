@@ -1,1 +1,22 @@
 // app global css in SCSS form
+.page {
+  padding: 5% 5% 0 5%;
+}
+
+.title {
+  font-family: 다음체;
+  font-size: 1.2rem;
+}
+
+.name {
+  font-family: 나눔고딕;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.tooltip {
+  background: rgba(100, 121, 151, 0.7);
+  border-radius: 0.5rem;
+  font-size: 0.5rem;
+  padding: 5px 12px;
+}

@@ -27,6 +27,7 @@ try {
   }
 } catch (_) {}
 
+import './ipc'
 let mainWindow
 
 function createWindow() {
@@ -60,6 +61,8 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  BrowserWindow.fromId(1).webContents.send('setup', setupVal)
 }
 
 app.whenReady().then(createWindow)

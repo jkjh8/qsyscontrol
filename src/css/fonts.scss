@@ -1,0 +1,56 @@
+@font-face {
+  font-family: "다음체";
+  font-style: nomal;
+  src: url(./fonts/Daum_Regular.woff);
+}
+
+@font-face {
+  font-family: "다음체";
+  font-style: bold;
+  src: url(./fonts/Daum_SemiBold.woff);
+}
+
+@font-face {
+  font-family: "나눔고딕";
+  font-weight: 300;
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/NanumGothicLight.woff") format("woff");
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+}
+
+@font-face {
+  font-family: "나눔고딕";
+  font-weight: 400;
+  font-style: normal;
+  font-weight: 400;
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+  src: url("./fonts/NanumGothic-Regular.eot");
+  src: url("./fonts/NanumGothic-Regular.eot?#iefix") format("embedded-opentype"),
+    url("./fonts/NanumGothic-Regular.woff2") format("woff2"),
+    url("./fonts/NanumGothic-Regular.woff") format("woff"),
+    url("./fonts/NanumGothic-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "나눔고딕";
+  font-weight: 700;
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+  src: url("./fonts/NanumGothic-Bold.eot");
+  src: url("./fonts/NanumGothic-Bold.eot?#iefix") format("embedded-opentype"),
+    url("./fonts/NanumGothic-Bold.woff2") format("woff2"),
+    url("./fonts/NanumGothic-Bold.woff") format("woff"),
+    url("./fonts/NanumGothic-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "나눔고딕";
+  font-weight: 800;
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+  src: url("./fonts/NanumGothic-ExtraBold.eot");
+  src: url("./fonts/NanumGothic-ExtraBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("./fonts/NanumGothic-ExtraBold.woff2") format("woff2"),
+    url("./fonts/NanumGothic-ExtraBold.woff") format("woff"),
+    url("./fonts/NanumGothic-ExtraBold.ttf") format("truetype");
+}
