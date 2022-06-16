@@ -13,7 +13,7 @@ export const chkEmailUsed = async (v) => {
   return true
 }
 export const chkIpaddr = (v) =>
-  /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/gm.test(
+  /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}(:)(?:\d)$/gm.test(
     v
   ) || 'IPv4 형식이 아닙니다'
 
@@ -25,6 +25,7 @@ export const chkIpExists = async (v) => {
   return true
 }
 export const chkInt = (v) => v > 0 || '0 보다 큰 숫자를 입력하세요'
+export const chkPort = (v) => v <= 65535 || '65535보다 작은 숫자를 입력하세요'
 
 export const chkDeviceIndex = async (v) => {
   const r = await api.get(`/device/exists?index=${v}`)

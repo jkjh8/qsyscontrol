@@ -1,10 +1,28 @@
 <script setup>
+import { useQuasar } from 'quasar'
 import { settings, updateSettings } from 'src/composables/useSetup'
-import { chkIpaddr } from 'src/composables/useRules'
+import { required } from 'src/composables/useRules'
 import PageName from 'components/layouts/pageName.vue'
 
+const $q = useQuasar()
+
 async function onSubmit() {
-  await api.send('setSetup', { ...settings.value })
+  $q.loading.show()
+  try {
+    const r = await api.send('setSetup', { ...settings.value })
+    $q.loading.hide()
+    $q.notify({
+      message: '설정 변경 완료하였습니다.',
+      caption: '변경된 설정 적용을 위해서 프로그램을 다시 시작하세요.',
+      position: 'top',
+      color: 'primary',
+      timeout: 1000,
+      icon: 'info'
+    })
+  } catch (error) {
+    $q.loading.hide()
+    console.error(error)
+  }
 }
 
 async function onCancel() {
@@ -23,10 +41,10 @@ async function onCancel() {
         <q-card-section>
           <q-input
             v-model="settings.serverIp"
-            label="Server IP Address"
+            label="Server Address"
             filled
             dense
-            :rules="[chkIpaddr]"
+            :rules="[required]"
           />
         </q-card-section>
 

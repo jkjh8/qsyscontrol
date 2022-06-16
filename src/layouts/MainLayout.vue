@@ -2,7 +2,8 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Menu from 'components/layouts/menuComponent.vue'
-import { updateSettings } from 'src/composables/useSetup'
+import { settings, updateSettings } from 'src/composables/useSetup'
+import { connected, connectSocket } from 'src/composables/useSocket'
 const router = useRouter()
 
 onMounted(async () => {
@@ -11,6 +12,9 @@ onMounted(async () => {
   // })
 
   updateSettings(await api.send('getSetup'))
+  if (settings.value.serverIp) {
+    connectSocket(settings.value.serverIp)
+  }
 })
 </script>
 
@@ -23,8 +27,12 @@ onMounted(async () => {
           name="svguse:icons.svg#logo"
           size="md"
           @click="router.push('/')"
-        />
-        <q-toolbar-title class="title"> Q-SYS CONTROL </q-toolbar-title>
+        >
+        </q-icon>
+        <q-toolbar-title class="row no-wrap">
+          <div class="title">Q-SYS CONTROL</div>
+          <div v-if="!connected" class="title-caption">Not Connected</div>
+        </q-toolbar-title>
       </q-toolbar>
       <Menu />
     </q-header>
@@ -34,3 +42,10 @@ onMounted(async () => {
     </q-page-container>
   </q-layout>
 </template>
+
+<style scoped>
+.title-caption {
+  font-size: 0.5rem;
+  color: #ff0000;
+}
+</style>
