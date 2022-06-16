@@ -4,7 +4,9 @@ import { getSetup, setSetup } from '../setupFiles'
 
 getSetup()
 ipcMain.handle('getSetup', async (e) => {
-  // BrowserWindow.fromId(1).webContents.send('setup', setupVal)
-  console.log(setupVal)
   return setupVal
+})
+
+ipcMain.handle('setSetup', async (e, args) => {
+  return setSetup(args)
 })

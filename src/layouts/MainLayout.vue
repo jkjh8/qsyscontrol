@@ -2,16 +2,15 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Menu from 'components/layouts/menuComponent.vue'
+import { updateSettings } from 'src/composables/useSetup'
 const router = useRouter()
 
-onMounted(() => {
-  api.handle('setup', (e, args) => {
-    console.log('setup', args)
-  })
+onMounted(async () => {
+  // api.handle('setup', (e, args) => {
+  //   console.log('setup', args)
+  // })
 
-  api.send('getSetup').then((r) => {
-    console.log(r)
-  })
+  updateSettings(await api.send('getSetup'))
 })
 </script>
 

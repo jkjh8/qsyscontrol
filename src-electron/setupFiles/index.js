@@ -3,7 +3,7 @@ import path from 'node:path'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 global.setupVal = {}
 
-const setupFilePath = path.join(app.getPath('appData'), 'setup', 'setup.json')
+const setupFilePath = path.join(app.getPath('appData'), 'setup.json')
 
 function getSetup() {
   if (existsSync(setupFilePath)) {
@@ -23,6 +23,7 @@ function setSetup(args) {
     setupVal = args
   }
   writeFileSync(setupFilePath, JSON.stringify(setupVal))
+  return args
 }
 
 export { getSetup, setSetup }
