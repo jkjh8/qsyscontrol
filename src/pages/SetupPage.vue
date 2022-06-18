@@ -6,10 +6,15 @@ import PageName from 'components/layouts/pageName.vue'
 
 const $q = useQuasar()
 
+async function getDir() {
+  const directory = await api.send('setup:getDirectory')
+  settings.value.path = directory
+}
+
 async function onSubmit() {
   $q.loading.show()
   try {
-    const r = await api.send('setSetup', { ...settings.value })
+    const r = await api.send('setup:set', { ...settings.value })
     $q.loading.hide()
     $q.notify({
       message: '설정 변경 완료하였습니다.',
@@ -26,7 +31,7 @@ async function onSubmit() {
 }
 
 async function onCancel() {
-  updateSettings(await api.send('getSetup'))
+  updateSettings(await api.send('setup:get'))
 }
 </script>
 
@@ -46,6 +51,11 @@ async function onCancel() {
             dense
             :rules="[required]"
           />
+          <q-input v-model="settings.path" label="Media Directory" filled dense>
+            <template #append>
+              <q-btn flat round color="primary" icon="search" @click="getDir" />
+            </template>
+          </q-input>
         </q-card-section>
 
         <q-card-actions align="right">

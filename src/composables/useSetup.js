@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 const settings = ref({
   serverIp: '',
-  serverPort: 3000
+  path: ''
 })
 
 function updateSettings(args) {

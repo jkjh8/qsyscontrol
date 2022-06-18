@@ -11,7 +11,7 @@ onMounted(async () => {
   //   console.log('setup', args)
   // })
 
-  updateSettings(await api.send('getSetup'))
+  updateSettings(await api.send('setup:get'))
   if (settings.value.serverIp) {
     connectSocket(settings.value.serverIp)
   }

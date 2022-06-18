@@ -65,6 +65,24 @@ module.exports = configure(function (ctx) {
 
       // https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      extendWebpack(cfg) {
+        cfg.resolve.fallback = {
+          fs: false,
+          crypto: false,
+          Buffer: false,
+          os: false,
+          path: false,
+          stream: false,
+          assert: false,
+          dns: false,
+          net: false,
+          tls: false,
+          http2: false,
+          https: false,
+          http: false,
+          zlib: false
+        }
+      },
 
       chainWebpack(chain) {
         chain
