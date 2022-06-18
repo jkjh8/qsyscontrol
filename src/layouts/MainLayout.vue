@@ -3,18 +3,14 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Menu from 'components/layouts/menuComponent.vue'
 import { settings, updateSettings } from 'src/composables/useSetup'
-import { connected, connectSocket } from 'src/composables/useSocket'
+
 const router = useRouter()
 
 onMounted(async () => {
-  // api.handle('setup', (e, args) => {
-  //   console.log('setup', args)
-  // })
-
+  api.handle('setup:rt', (e, args) => {
+    updateSettings(args)
+  })
   updateSettings(await api.send('setup:get'))
-  if (settings.value.serverIp) {
-    connectSocket(settings.value.serverIp)
-  }
 })
 </script>
 
@@ -31,7 +27,9 @@ onMounted(async () => {
         </q-icon>
         <q-toolbar-title class="row no-wrap">
           <div class="title">Q-SYS CONTROL</div>
-          <div v-if="!connected" class="title-caption">Not Connected</div>
+          <div v-if="!settings.connected" class="title-caption">
+            Not Connected
+          </div>
         </q-toolbar-title>
       </q-toolbar>
       <Menu />

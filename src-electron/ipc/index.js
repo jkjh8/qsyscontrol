@@ -2,7 +2,6 @@ import { ipcMain, BrowserWindow, dialog } from 'electron'
 import path from 'node:path'
 import { getSetup, setSetup } from '../setupFiles'
 
-getSetup()
 ipcMain.handle('setup:get', async (e) => {
   return setupVal
 })

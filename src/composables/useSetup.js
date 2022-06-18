@@ -1,7 +1,8 @@
 import { ref } from 'vue'
 const settings = ref({
-  serverIp: '',
-  path: ''
+  address: '',
+  path: '',
+  connected: false
 })
 
 function updateSettings(args) {

@@ -45,7 +45,7 @@ async function onCancel() {
       <q-form @submit="onSubmit">
         <q-card-section>
           <q-input
-            v-model="settings.serverIp"
+            v-model="settings.address"
             label="Server Address"
             filled
             dense

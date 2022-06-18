@@ -1,6 +1,7 @@
 import { app } from 'electron'
 import path from 'node:path'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+
 global.setupVal = {}
 
 const setupFilePath = path.join(app.getPath('appData'), 'setup.json')

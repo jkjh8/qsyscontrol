@@ -1,18 +1,12 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, protocol } from 'electron'
 import path from 'path'
 import os from 'os'
+import { getSetup } from './setupFiles'
+import { connectSocket } from './io'
 
 app.requestSingleInstanceLock({ key: 'qsyscontrolforbs' })
 app.on('second-instance', (e, argv, cwd) => {
   console.log(e, argv, cwd)
-  // dialog
-  //   .showMessageBox({
-  //     message: '중복 실행 오류',
-  //     buttons: ['ok']
-  //   })
-  //   .then((r) => {
-  //     console.log(r)
-  //   })
   app.exit(0)
 })
 
@@ -61,11 +55,22 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  BrowserWindow.fromId(1).webContents.send('setup', setupVal)
 }
 
-app.whenReady().then(createWindow)
+// app.whenReady().then(createWindow)
+app.on('ready', async () => {
+  protocol.registerFileProtocol('local', (request, callback) => {
+    const pathname = decodeURIComponent(request.url.replace('local://', ''))
+    try {
+      callback(pathname)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+  getSetup()
+  createWindow()
+  connectSocket(setupVal.address)
+})
 
 app.on('window-all-closed', () => {
   if (platform !== 'darwin') {
