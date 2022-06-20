@@ -41,6 +41,10 @@ function connectSocket(addr) {
     console.log('connect_error', error)
     mainWindow.webContents.send('setup:rt', setupVal)
   })
+
+  socket.on('devices', (args) => {
+    mainWindow.webContents.send('devices:rt', args)
+  })
 }
 
 export { connectSocket }

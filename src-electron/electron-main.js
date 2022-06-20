@@ -4,6 +4,8 @@ import os from 'os'
 import { getSetup } from './setupFiles'
 import { connectSocket } from './io'
 
+global.deviceStatus = {}
+
 app.requestSingleInstanceLock({ key: 'qsyscontrolforbs' })
 app.on('second-instance', (e, argv, cwd) => {
   console.log(e, argv, cwd)
@@ -67,6 +69,7 @@ app.on('ready', async () => {
       console.log(error)
     }
   })
+  import('./db/mongodb')
   getSetup()
   createWindow()
   connectSocket(setupVal.address)

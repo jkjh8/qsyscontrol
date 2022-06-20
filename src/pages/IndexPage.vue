@@ -1,14 +1,27 @@
 <script setup>
-import { devices, search } from 'src/composables/useDevices'
+import { onMounted } from 'vue'
+import { devices, search, neededControl } from 'src/composables/useDevices'
 import PageName from 'components/layouts/pageName.vue'
 import IconBtn from 'components/iconBtn'
+
+async function getDevices() {
+  devices.value = JSON.parse(await api.send('devices:get'))
+}
+
+function fnRefreshDevice(args) {
+  api.send('device:getStatus', { ...args })
+}
+
+onMounted(() => {
+  getDevices()
+})
 </script>
 
 <template>
   <div class="row no-wrap justify-between items-center">
     <page-name
       name="Q-SYS LIST"
-      caption="하드웨어 등록 삭제 및 관리"
+      caption="하드웨어 상태 표시"
       icon="svguse:icons.svg#serverColorPlus"
     />
 
@@ -20,18 +33,11 @@ import IconBtn from 'components/iconBtn'
       </q-input>
       <q-separator vertical />
       <IconBtn
-        name="add_circle"
-        color="green-10"
-        size="30px"
-        msg="하드웨어추가"
-        @click="fnAdd()"
-      />
-      <IconBtn
         name="refresh"
-        color="green-10"
+        color="green-8"
         size="30px"
         msg="새로고침"
-        @click="fnRefreshAll()"
+        @click="getDevices"
       />
     </div>
   </div>
@@ -41,14 +47,14 @@ import IconBtn from 'components/iconBtn'
         {
           name: 'index',
           field: 'index',
-          label: 'INDEX',
+          label: 'Index',
           sortable: true,
           align: 'center'
         },
         {
           name: 'name',
           field: 'name',
-          label: 'NAME',
+          label: 'Name',
           sortable: true,
           align: 'center'
         },
@@ -60,12 +66,34 @@ import IconBtn from 'components/iconBtn'
           align: 'center'
         },
         {
+          name: 'deviceType',
+          field: 'deviceType',
+          label: 'Type',
+          sortable: true,
+          align: 'center'
+        },
+        {
           name: 'actions',
           label: 'Actions',
           align: 'center'
         }
       ]"
-    ></q-table>
+      :rows="neededControl"
+    >
+      <template #body-cell-actions="props">
+        <q-td :props="props">
+          <div>
+            <q-btn
+              round
+              flat
+              color="green-8"
+              icon="refresh"
+              @click="fnRefreshDevice(props.row)"
+            />
+          </div>
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
