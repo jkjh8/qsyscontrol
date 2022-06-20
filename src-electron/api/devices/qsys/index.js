@@ -4,29 +4,30 @@ import { loggerArr } from '../../../api/logger'
 
 const qsysDevices = {}
 
-function runQsysConnect(ipaddr) {
+async function runQsysConnect(ipaddr) {
   try {
     const core = new Qrc(ipaddr)
     qsysDevices[ipaddr] = core
-    core.on('connect', () => {
-      redis.HSET('status', ipaddr, true)
+    core.on('connect', async () => {
+      await redis.HSET('status', ipaddr, 'true')
       loggerArr(3, 'Device Control', `Q-Sys Connected ${ipaddr}`)
     })
     core.on('error', async (err) => {
       qsysDevices[ipaddr] = null
-      redis.HSET('status', ipaddr, false)
+      console.log(ipaddr)
+      await redis.HSET('status', ipaddr, 'false')
       loggerArr(5, 'Device Control', `Q-Sys Error ${ipaddr} ${err}`)
     })
-    core.on('exit', () => {
+    core.on('exit', async () => {
       qsysDevices[ipaddr] = null
-      redis.HSET('status', ipaddr, false)
+      await redis.HSET('status', ipaddr, 'false')
       loggerArr(5, 'Device Control', `Q-Sys Exit ${ipaddr}`)
     })
     core.on('message', (args) => {
       console.log(args)
     })
   } catch (err) {
-    redis.HSET('status', ipaddr, false)
+    await redis.HSET('status', ipaddr, 'false')
     loggerArr(5, 'Device Control', `Q-Sys Error ${ipaddr} ${err}`)
   }
 }
