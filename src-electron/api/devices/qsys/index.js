@@ -8,17 +8,26 @@ function runQsysConnect(ipaddr) {
   try {
     const core = new Qrc(ipaddr)
     qsysDevices[ipaddr] = core
-    core.on('error', () => {
+    core.on('connect', () => {
+      redis.HSET('status', ipaddr, true)
+      loggerArr(3, 'Device Control', `Q-Sys Connected ${ipaddr}`)
+    })
+    core.on('error', async (err) => {
       qsysDevices[ipaddr] = null
+      redis.HSET('status', ipaddr, false)
+      loggerArr(5, 'Device Control', `Q-Sys Error ${ipaddr} ${err}`)
     })
     core.on('exit', () => {
       qsysDevices[ipaddr] = null
+      redis.HSET('status', ipaddr, false)
+      loggerArr(5, 'Device Control', `Q-Sys Exit ${ipaddr}`)
     })
     core.on('message', (args) => {
       console.log(args)
     })
   } catch (err) {
-    console.error(err)
+    redis.HSET('status', ipaddr, false)
+    loggerArr(5, 'Device Control', `Q-Sys Error ${ipaddr} ${err}`)
   }
 }
 
