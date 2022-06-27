@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 const devices = ref([])
+const search = ref('')
 
 const neededControl = computed(() => {
   const rt = []
@@ -10,6 +11,9 @@ const neededControl = computed(() => {
   })
   return rt
 })
-const search = ref('')
 
-export { devices, search, neededControl }
+function updateDevices(args) {
+  devices.value = args
+}
+
+export { devices, search, neededControl, updateDevices }

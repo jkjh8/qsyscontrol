@@ -16,7 +16,7 @@ async function runQsysConnect(ipaddr) {
       qsysDevices[ipaddr] = null
       console.log(ipaddr)
       await redis.HSET('status', ipaddr, 'false')
-      loggerArr(5, 'Device Control', `Q-Sys Error ${ipaddr} ${err}`)
+      loggerArr(5, 'Device Control', `Q-Sys ${ipaddr} ${err}`)
     })
     core.on('exit', async () => {
       qsysDevices[ipaddr] = null

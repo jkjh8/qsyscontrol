@@ -3,17 +3,16 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Menu from 'components/layouts/menuComponent.vue'
 import { settings, updateSettings } from 'src/composables/useSetup'
-import { devices } from 'src/composables/useDevices'
+import { devices, updateDevices } from 'src/composables/useDevices'
 
 const router = useRouter()
 
 onMounted(async () => {
   api.handle('setup:rt', (e, args) => {
-    updateSettings(args)
+    updateSettings(JSON.parse(args))
   })
   api.handle('devices:rt', (e, args) => {
-    console.log(args)
-    devices.value = args
+    updateDevices(JSON.parse(args))
   })
   updateSettings(await api.send('setup:get'))
 })

@@ -90,7 +90,7 @@ export default class Qrc extends EventEmitter {
   noOp() {
     this._noOpInterval = setInterval(() => {
       console.log('noOp')
-      this.socket.write(
+      this.client.write(
         JSON.stringify({ jsonrpc: '2.0', method: 'NoOp', params: {} }) + '\0'
       )
     }, 50000)

@@ -5,15 +5,17 @@ import PageName from 'components/layouts/pageName.vue'
 import IconBtn from 'components/iconBtn'
 
 async function getDevices() {
+  console.log('getdevice')
   devices.value = JSON.parse(await api.send('devices:get'))
 }
 
 function fnRefreshDevice(args) {
-  api.send('device:getStatus', { ...args })
+  api.send('device:getStatus', JSON.stringify(args))
 }
 
 onMounted(() => {
   getDevices()
+  api.send('setup:get')
 })
 </script>
 
