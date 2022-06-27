@@ -9,4 +9,8 @@ function updateSettings(args) {
   settings.value = args
 }
 
-export { settings, updateSettings }
+async function getSettings() {
+  settings.value = JSON.parse(await api.send('setup:get'))
+}
+
+export { settings, updateSettings, getSettings }

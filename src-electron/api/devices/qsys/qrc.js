@@ -16,6 +16,8 @@ export default class Qrc extends EventEmitter {
       console.log('connected')
       this.connected = true
       this.emit('connect')
+      // this.logon()
+      this.getStatus()
       this.noOp()
     })
 
@@ -65,7 +67,7 @@ export default class Qrc extends EventEmitter {
       this.queueProcess()
       this._commandInterval = setInterval(() => {
         this.queueProcess()
-      }, 1000)
+      }, 500)
     }
   }
 
@@ -90,9 +92,41 @@ export default class Qrc extends EventEmitter {
   noOp() {
     this._noOpInterval = setInterval(() => {
       console.log('noOp')
-      this.client.write(
-        JSON.stringify({ jsonrpc: '2.0', method: 'NoOp', params: {} }) + '\0'
-      )
+      this.getStatus()
+      // this.client.write(
+      //   JSON.stringify({ jsonrpc: '2.0', method: 'NoOp', params: {} }) + '\0'
+      // )
     }, 50000)
+  }
+
+  logon() {
+    this.send({
+      method: 'Logon',
+      params: { User: 'admin', Password: 'password' }
+    })
+  }
+
+  getStatus() {
+    this.send({
+      id: 'GetStatus',
+      method: 'StatusGet',
+      params: 0
+    })
+  }
+
+  getPa() {
+    this.send({
+      id: 'GetPa',
+      method: 'Component.GetControls',
+      params: { Name: 'PA' }
+    })
+  }
+
+  getPaStatic() {
+    this.send({
+      id: 'GetPaStatic',
+      method: 'Component.GetControls',
+      params: { Name: 'PA' }
+    })
   }
 }

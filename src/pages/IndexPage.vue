@@ -1,8 +1,15 @@
 <script setup>
 import { onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 import { devices, search, neededControl } from 'src/composables/useDevices'
+import { status, getStatus, getColorStatus } from 'src/composables/useStatus'
+import { getSettings } from 'src/composables/useSetup'
+
+import InfoDialog from 'components/dialogs/info/infoDialog.vue'
 import PageName from 'components/layouts/pageName.vue'
 import IconBtn from 'components/iconBtn'
+
+const $q = useQuasar()
 
 async function getDevices() {
   console.log('getdevice')
@@ -13,9 +20,17 @@ function fnRefreshDevice(args) {
   api.send('device:getStatus', JSON.stringify(args))
 }
 
-onMounted(() => {
-  getDevices()
-  api.send('setup:get')
+function getInfo(args) {
+  $q.dialog({
+    component: InfoDialog,
+    componentProps: { item: args }
+  })
+}
+
+onMounted(async () => {
+  await getDevices()
+  await getStatus()
+  await getSettings()
 })
 </script>
 
@@ -82,16 +97,39 @@ onMounted(() => {
       ]"
       :rows="neededControl"
     >
+      <template #body-cell-index="props">
+        <q-td :props="props">
+          <q-avatar round size="sm">
+            {{ props.row.index }}
+            <q-badge
+              rounded
+              floating
+              :color="getColorStatus(props.row.ipaddress)"
+            ></q-badge>
+          </q-avatar>
+        </q-td>
+      </template>
       <template #body-cell-actions="props">
         <q-td :props="props">
           <div>
             <q-btn
               round
               flat
+              icon="info"
+              color="yellow-8"
+              @click="getInfo(props.row)"
+            >
+              <q-tooltip>Infomation</q-tooltip>
+            </q-btn>
+            <q-btn
+              round
+              flat
               color="green-8"
               icon="refresh"
               @click="fnRefreshDevice(props.row)"
-            />
+            >
+              <q-tooltip>Refresh</q-tooltip>
+            </q-btn>
           </div>
         </q-td>
       </template>

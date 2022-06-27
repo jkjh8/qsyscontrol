@@ -1,6 +1,7 @@
 <script setup>
+import { onMounted } from 'vue'
 import { useQuasar } from 'quasar'
-import { settings, updateSettings } from 'src/composables/useSetup'
+import { settings, updateSettings, getSettings } from 'src/composables/useSetup'
 import { required } from 'src/composables/useRules'
 import PageName from 'components/layouts/pageName.vue'
 
@@ -31,8 +32,12 @@ async function onSubmit() {
 }
 
 async function onCancel() {
-  updateSettings(await api.send('setup:get'))
+  updateSettings(JSON.parse(await api.send('setup:get')))
 }
+
+onMounted(async () => {
+  await getSettings()
+})
 </script>
 
 <template>

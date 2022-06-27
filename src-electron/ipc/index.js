@@ -1,13 +1,17 @@
-import { json } from 'body-parser'
 import { ipcMain, BrowserWindow, dialog } from 'electron'
 import path from 'node:path'
 import Devices from '../db/models/devices'
 import { getSetup, setSetup } from '../setupFiles'
 import { qsysGetStatus, qsysGetPa } from '../api/devices/qsys'
 import barixGetStatus from '../api/devices/barix'
+import redis from '../db/redis'
+
+ipcMain.handle('status:get', async () => {
+  return JSON.stringify(await redis.HGETALL('status'))
+})
 
 ipcMain.handle('setup:get', async (e) => {
-  return setupVal
+  return JSON.stringify(setupVal)
 })
 
 ipcMain.handle('setup:set', async (e, args) => {
@@ -25,11 +29,15 @@ ipcMain.handle('devices:get', async () => {
   return JSON.stringify(await Devices.find({}).sort({ index: 1 }))
 })
 
+ipcMain.handle('device:info', async (e, ipaddr) => {
+  return await redis.get(`status:${ipaddr}`)
+})
+
 ipcMain.handle('device:getStatus', async (e, args) => {
   const { deviceType, ipaddress } = JSON.parse(args)
   switch (deviceType) {
     case 'Q-Sys':
-      qsysGetStatus(ipaddress)
+      // qsysGetStatus(ipaddress)
       qsysGetPa(ipaddress)
       break
     case 'Barix':
