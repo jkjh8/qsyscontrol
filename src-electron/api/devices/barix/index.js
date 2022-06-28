@@ -21,7 +21,6 @@ export default async function (ipaddress) {
       JSON.stringify({ deviceType: 'Barix', ...status })
     )
     await redis.HSET('status', ipaddress, 'true')
-    console.log(status)
   } catch (err) {
     await redis.DEL(`status:${ipaddress}`)
     await redis.HSET('status', ipaddress, 'false')

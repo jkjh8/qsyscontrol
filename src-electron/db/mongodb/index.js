@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-const { loggerArr } = require('../../api/logger')
+import { loggerArr } from '../../api/logger'
 
 mongoose
   .connect(
@@ -14,4 +14,4 @@ mongoose
     loggerArr(5, 'Device Control', `Mongodb Connect Error ${e}`)
   })
 
-module.exports = mongoose.connection
+export default mongoose.connection

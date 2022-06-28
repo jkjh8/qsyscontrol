@@ -13,7 +13,6 @@ export default class Qrc extends EventEmitter {
     this._commandInterval = null
 
     this.client.on('connect', () => {
-      console.log('connected')
       this.connected = true
       this.emit('connect')
       // this.logon()
@@ -75,7 +74,6 @@ export default class Qrc extends EventEmitter {
     if (this._command.length) {
       if (this.connected) {
         const msg = this._command.shift()
-        console.log(msg)
         try {
           this.client.write(JSON.stringify({ jsonrpc: '2.0', ...msg }) + '\0')
         } catch (err) {
@@ -91,7 +89,6 @@ export default class Qrc extends EventEmitter {
 
   noOp() {
     this._noOpInterval = setInterval(() => {
-      console.log('noOp')
       this.getStatus()
       // this.client.write(
       //   JSON.stringify({ jsonrpc: '2.0', method: 'NoOp', params: {} }) + '\0'

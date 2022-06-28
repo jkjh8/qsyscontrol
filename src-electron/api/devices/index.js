@@ -3,7 +3,7 @@ import { qsysGetStatus, qsysGetPa } from './qsys'
 import barixGetStatus from './barix'
 
 export default async function () {
-  const devices = await Devices.find({})
+  const devices = await Devices.find({ mode: { $ne: 'Local' } })
 
   devices.forEach((device) => {
     const { deviceType, ipaddress } = device
