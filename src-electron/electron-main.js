@@ -1,6 +1,7 @@
 import { app, BrowserWindow, nativeTheme, protocol } from 'electron'
 import path from 'path'
 import os from 'os'
+import refreshDevices from './api/devices'
 import { getSetup } from './setupFiles'
 import { connectSocket } from './io'
 
@@ -24,7 +25,9 @@ try {
 } catch (_) {}
 
 import './ipc'
+
 let mainWindow
+let refreshInterval
 
 function createWindow() {
   /**
@@ -73,6 +76,9 @@ app.on('ready', async () => {
   getSetup()
   createWindow()
   connectSocket(setupVal.address)
+  refreshInterval = setInterval(() => {
+    refreshDevices()
+  }, 55000)
 })
 
 app.on('window-all-closed', () => {

@@ -1,7 +1,12 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useQuasar } from 'quasar'
-import { devices, search, neededControl } from 'src/composables/useDevices'
+import {
+  devices,
+  search,
+  neededControl,
+  getDevices
+} from 'src/composables/useDevices'
 import { status, getStatus, getColorStatus } from 'src/composables/useStatus'
 import { getSettings } from 'src/composables/useSetup'
 
@@ -11,13 +16,14 @@ import IconBtn from 'components/iconBtn'
 
 const $q = useQuasar()
 
-async function getDevices() {
-  console.log('getdevice')
-  devices.value = JSON.parse(await api.send('devices:get'))
-}
-
 function fnRefreshDevice(args) {
   api.send('device:getStatus', JSON.stringify(args))
+}
+
+async function fnRefreshTable() {
+  await getDevices()
+  await getStatus()
+  await getSettings()
 }
 
 function getInfo(args) {
@@ -28,9 +34,7 @@ function getInfo(args) {
 }
 
 onMounted(async () => {
-  await getDevices()
-  await getStatus()
-  await getSettings()
+  fnRefreshTable()
 })
 </script>
 
@@ -54,7 +58,7 @@ onMounted(async () => {
         color="green-8"
         size="30px"
         msg="새로고침"
-        @click="getDevices"
+        @click="fnRefreshTable"
       />
     </div>
   </div>

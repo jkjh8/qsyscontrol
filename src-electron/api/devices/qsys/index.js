@@ -2,6 +2,7 @@ import Qrc from './qrc'
 import redis from '../../../db/redis'
 import { loggerArr } from '../../../api/logger'
 import Devices from '../../../db/models/devices'
+import { socketSend } from '../../../io'
 
 const qsysDevices = {}
 
@@ -50,9 +51,13 @@ export const qsysGetStatus = (ipaddr) => {
 
 export const qsysGetPa = (ipaddr) => {
   chkQsysConnect(ipaddr)
-  qsysDevices[ipaddr].getPaStatic()
+  qsysDevices[ipaddr].getPa()
 }
 
+export const qsysGetPaStatic = (ipaddr) => {
+  chkQsysConnect(ipaddr)
+  qsysDevices[ipaddr].getPaStatic()
+}
 export const qsysSetTx = async (device) => {
   try {
     const { core, channels, children } = device
@@ -140,7 +145,8 @@ async function qsysCommands(ipaddr, args) {
           JSON.stringify({ deviceType: 'Q-Sys', ...args.result.Controls }),
           { EX: 600 }
         )
-        socket.emit('PA', args.result.Controls)
+        // send data throw socketio
+        socketSend('PA', args.result.Controls)
         break
       default:
         console.log('not match id', args)

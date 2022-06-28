@@ -2,7 +2,7 @@ import { ipcMain, BrowserWindow, dialog } from 'electron'
 import path from 'node:path'
 import Devices from '../db/models/devices'
 import { getSetup, setSetup } from '../setupFiles'
-import { qsysGetStatus, qsysGetPa } from '../api/devices/qsys'
+import { qsysGetStatus, qsysGetPaStatic } from '../api/devices/qsys'
 import barixGetStatus from '../api/devices/barix'
 import redis from '../db/redis'
 
@@ -38,7 +38,7 @@ ipcMain.handle('device:getStatus', async (e, args) => {
   switch (deviceType) {
     case 'Q-Sys':
       // qsysGetStatus(ipaddress)
-      qsysGetPa(ipaddress)
+      qsysGetPaStatic(ipaddress)
       break
     case 'Barix':
       barixGetStatus(ipaddress)

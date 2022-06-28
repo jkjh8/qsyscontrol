@@ -50,4 +50,8 @@ function connectSocket(addr) {
   })
 }
 
-export { connectSocket }
+function socketSend(namespace, args) {
+  socket.emit(namespace, args)
+}
+
+export { connectSocket, socketSend }

@@ -16,4 +16,8 @@ function updateDevices(args) {
   devices.value = args
 }
 
-export { devices, search, neededControl, updateDevices }
+async function getDevices() {
+  devices.value = JSON.parse(await api.send('devices:get'))
+}
+
+export { devices, search, neededControl, updateDevices, getDevices }
