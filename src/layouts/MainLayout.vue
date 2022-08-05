@@ -17,7 +17,7 @@ onMounted(async () => {
   api.handle('status:rt', (e, args) => {
     updateStatus(JSON.parse(args))
   })
-  updateSettings(await api.send('setup:get'))
+  // updateSettings(await api.send('setup:get'))
 })
 </script>
 

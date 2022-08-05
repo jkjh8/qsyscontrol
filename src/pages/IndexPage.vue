@@ -22,8 +22,8 @@ function fnRefreshDevice(args) {
 
 async function fnRefreshTable() {
   await getDevices()
-  await getStatus()
-  await getSettings()
+  // await getStatus()
+  // await getSettings()
 }
 
 function getInfo(args) {

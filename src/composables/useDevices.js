@@ -1,4 +1,6 @@
 import { ref, computed } from 'vue'
+import { api } from './useAxios'
+
 const devices = ref([])
 const search = ref('')
 
@@ -17,7 +19,9 @@ function updateDevices(args) {
 }
 
 async function getDevices() {
-  devices.value = JSON.parse(await api.send('devices:get'))
+  const r = await api.get('/device/qcontrol')
+  console.log(r)
+  devices.value = r.data
 }
 
 export { devices, search, neededControl, updateDevices, getDevices }

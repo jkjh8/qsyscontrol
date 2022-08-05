@@ -6,6 +6,8 @@ import { qsysGetStatus, qsysGetPaStatic } from '../api/devices/qsys'
 import barixGetStatus from '../api/devices/barix'
 import redis from '../db/redis'
 
+import { getDevices } from '../api/devices'
+
 ipcMain.handle('status:get', async () => {
   return JSON.stringify(await redis.HGETALL('status'))
 })
@@ -26,7 +28,7 @@ ipcMain.handle('setup:getDirectory', async (e) => {
 })
 
 ipcMain.handle('devices:get', async () => {
-  return JSON.stringify(await Devices.find({}).sort({ index: 1 }))
+  return JSON.stringify(await getDevices())
 })
 
 ipcMain.handle('device:info', async (e, ipaddr) => {

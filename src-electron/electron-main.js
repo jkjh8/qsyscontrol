@@ -1,11 +1,11 @@
-import { app, BrowserWindow, nativeTheme, protocol } from 'electron'
+import { app, BrowserWindow, nativeTheme, protocol, session } from 'electron'
 import path from 'path'
 import os from 'os'
-import refreshDevices from './api/devices'
-import { getSetup } from './setupFiles'
-import { connectSocket } from './io'
+// import refreshDevices from './api/devices'
+// import { getSetup } from './setupFiles'
+// import { connectSocket } from './io'
 
-global.deviceStatus = {}
+// global.deviceStatus = {}
 
 app.requestSingleInstanceLock({ key: 'qsyscontrolforbs' })
 app.on('second-instance', (e, argv, cwd) => {
@@ -24,7 +24,7 @@ try {
   }
 } catch (_) {}
 
-import './ipc'
+// import './ipc'
 
 let mainWindow
 let refreshInterval
@@ -50,13 +50,14 @@ function createWindow() {
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
-    mainWindow.webContents.openDevTools({ mode: 'detach' })
-  } else {
-    // we're on production; no access to devtools pls
-    mainWindow.webContents.on('devtools-opened', () => {
-      mainWindow.webContents.closeDevTools()
-    })
+    mainWindow.webContents.openDevTools()
   }
+  // } else {
+  //   // we're on production; no access to devtools pls
+  //   mainWindow.webContents.on('devtools-opened', () => {
+  //     mainWindow.webContents.closeDevTools()
+  //   })
+  // }
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -73,15 +74,28 @@ app.on('ready', async () => {
       console.log(error)
     }
   })
-  import('./db/mongodb')
-  getSetup()
-  createWindow()
-  connectSocket(setupVal.address)
-  refreshInterval = setInterval(() => {
-    refreshDevices()
-  }, 55000)
-})
 
+  const filter = {
+    urls: ['*://*.example.com/*']
+  }
+
+  session.defaultSession.webRequest.onHeadersReceived(
+    filter,
+    (details, callback) => {
+      details.responseHeaders['Access-Control-Allow-Origin'] = [
+        'http://localhost:3000'
+      ]
+      callback({ responseHeaders: details.responseHeaders })
+    }
+  )
+  // import('./db/mongodb')
+  // getSetup()
+  createWindow()
+  // connectSocket(setupVal.address)
+  // refreshInterval = setInterval(() => {
+  //   refreshDevices()
+  // }, 55000)
+})
 app.on('window-all-closed', () => {
   if (platform !== 'darwin') {
     app.quit()

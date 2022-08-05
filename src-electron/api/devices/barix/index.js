@@ -1,29 +1,22 @@
-import axios from 'axios'
-import cheerio from 'cheerio'
-import redis from '../../../db/redis'
-import { loggerArr } from '../../logger'
+import { api } from '../../useAxios'
 
-export default async function (ipaddress) {
-  try {
-    const html = await axios.get(`http://${ipaddress}/status`, {
-      timeout: 5000
-    })
-    let status = []
-    const $ = cheerio.load(html.data)
-    $('dd').each((i, item) => {
-      status[$(item).find('span:nth-of-type(2)').attr('class')] = $(item)
-        .find('span:nth-of-type(2)')
-        .text()
-        .trim()
-    })
-    await redis.SET(
-      `status:${ipaddress}`,
-      JSON.stringify({ deviceType: 'Barix', ...status })
-    )
-    await redis.HSET('status', ipaddress, 'true')
-  } catch (err) {
-    await redis.DEL(`status:${ipaddress}`)
-    await redis.HSET('status', ipaddress, 'false')
-    loggerArr(5, 'Device Control', `Barix ${ipaddress} ${err}`)
-  }
+export function fromBarix(workerData) {
+  const worker = new Worker('./worker.js', { workerData })
+  worker.on('message', async (msg) => {
+    const r = await api.post('/device/barix/update')
+    console.log(r)
+    worker.terminate()
+  })
+
+  worker.on('error', async (err) => {
+    const r = await api.get('/device/barix/status:')
+    console.error(err)
+    worker.terminate()
+  })
+
+  worker.on('exit', (code) => {
+    if (!code === 1) {
+      console.error('exit, ' + code)
+    }
+  })
 }
